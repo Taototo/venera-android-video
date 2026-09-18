@@ -433,7 +433,8 @@ class _VideoControlsOverlay extends StatelessWidget {
               final max = duration.inMilliseconds.toDouble();
               final value = seekValue ?? position.inMilliseconds.toDouble();
               final hasDuration = max > 0;
-              final clamped = hasDuration ? value.clamp(0, max).toDouble() : 0;
+              final clamped =
+                  hasDuration ? value.clamp(0, max).toDouble() : 0.0;
               return Column(
                 children: [
                   Row(
