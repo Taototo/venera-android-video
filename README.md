@@ -27,6 +27,25 @@ A comic reader that support reading local and network comics.
 3. Install rust, see [rustup.rs](https://rustup.rs/)
 4. Build for your platform: e.g. `flutter build apk`
 
+## Video playback
+
+Video playback uses [media_kit](https://github.com/media-kit/media-kit) and a
+Venera-styled custom control layer. The reusable page is
+`lib/pages/video_player_page.dart`; a video source only needs to resolve a
+playable URL and can pass request headers when a site requires them:
+
+```dart
+context.to(() => VideoPlayerPage(
+  url: videoUrl,
+  title: episodeTitle,
+  headers: {'Referer': sourceUrl},
+));
+```
+
+`MediaKit.ensureInitialized()` is called during app startup. The native video
+libraries are declared in `pubspec.yaml` through `media_kit_libs_video`, which
+supports Android and the other Flutter targets already supported by Venera.
+
 ## Create a new comic source
 See [Comic Source](doc/comic_source.md)
 

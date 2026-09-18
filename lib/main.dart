@@ -5,6 +5,7 @@ import 'package:flex_seed_scheme/flex_seed_scheme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:media_kit/media_kit.dart';
 import 'package:venera/foundation/log.dart';
 import 'package:venera/pages/auth_page.dart';
 import 'package:venera/pages/main_page.dart';
@@ -26,6 +27,8 @@ void main(List<String> args) {
   overrideIO(() {
     runZonedGuarded(() async {
       WidgetsFlutterBinding.ensureInitialized();
+      // Initialise the native media backend before any Player is created.
+      MediaKit.ensureInitialized();
       await init();
       runApp(const MyApp());
       if (App.isDesktop) {

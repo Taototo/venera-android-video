@@ -84,6 +84,10 @@ dependencies:
   enough_convert: ^1.6.0
   display_mode: ^0.0.2
   flutter_staggered_grid_view: ^0.7.0
+  # Cross-platform playback engine used by the video player page.
+  media_kit: ^1.2.6
+  media_kit_video: ^2.0.1
+  media_kit_libs_video: ^1.0.7
 
 dev_dependencies:
   flutter_test:
