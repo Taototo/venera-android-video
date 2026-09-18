@@ -35,6 +35,33 @@ class _ReaderImagesState extends State<_ReaderImages> {
     }
   }
 
+  /// Video-capable sources return one JSON marker instead of image URLs.
+  /// Replace the reader route so the system back button returns directly to
+  /// the comic details page rather than to an empty image reader.
+  bool _openVideoIfNeeded(List<String> media) {
+    if (media.length != 1) return false;
+    final payload = decodeVideoMediaMarker(media.first);
+    if (payload == null) return false;
+    final url = payload['url'] as String;
+    final title = payload['title'] as String?;
+    final headers = payload['headers'] is Map
+        ? Map<String, String>.from(payload['headers'] as Map)
+        : null;
+    reader.isLoading = false;
+    inProgress = false;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      context.toReplacement(
+        () => VideoPlayerPage(
+          url: url,
+          title: title,
+          headers: headers,
+        ),
+      );
+    });
+    return true;
+  }
+
   void load() async {
     if (inProgress) return;
     inProgress = true;
@@ -51,6 +78,7 @@ class _ReaderImagesState extends State<_ReaderImages> {
           reader.type,
           reader.chapter,
         );
+        if (_openVideoIfNeeded(images)) return;
         setState(() {
           reader.images = images;
           reader.isLoading = false;
@@ -80,6 +108,7 @@ class _ReaderImagesState extends State<_ReaderImages> {
           inProgress = false;
         });
       } else {
+        if (_openVideoIfNeeded(res.data)) return;
         setState(() {
           reader.images = res.data;
           reader.isLoading = false;

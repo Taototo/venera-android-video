@@ -96,9 +96,12 @@ void _checkOldConfigs() {
     appdata.writeImplicitData();
   }
 
-  if (appdata.settings['comicSourceListUrl'].toString().contains("git.nyne.dev")) {
-    // migrate to jsdelivr cdn
-    appdata.settings['comicSourceListUrl'] = "https://cdn.jsdelivr.net/gh/venera-app/venera-configs@main/index.json";
+  final sourceListUrl = appdata.settings['comicSourceListUrl'].toString();
+  if (sourceListUrl.contains("git.nyne.dev") ||
+      sourceListUrl.contains("venera-app/venera-configs")) {
+    // Keep this fork's curated source list, including video sources.
+    appdata.settings['comicSourceListUrl'] =
+        "https://cdn.jsdelivr.net/gh/Taototo/venera-comic-sources@main/index.json";
     appdata.saveData();
   }
 }

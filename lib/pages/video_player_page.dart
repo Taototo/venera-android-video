@@ -1,10 +1,32 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:media_kit/media_kit.dart';
 import 'package:media_kit_video/media_kit_video.dart';
 import 'package:venera/utils/translations.dart';
+
+/// Prefix used by a comic source when an episode resolves to a video instead
+/// of a list of image URLs. The reader consumes this marker and replaces its
+/// route with [VideoPlayerPage].
+const kVideoMediaMarker = 'venera-video:';
+
+/// Decode a source-provided video marker.
+///
+/// Keeping this format small and JSON-based lets JavaScript sources pass a
+/// signed HLS URL, a title, and any required request headers without adding a
+/// video-specific API to every source.
+Map<String, dynamic>? decodeVideoMediaMarker(String value) {
+  if (!value.startsWith(kVideoMediaMarker)) return null;
+  try {
+    final decoded = jsonDecode(value.substring(kVideoMediaMarker.length));
+    if (decoded is! Map || decoded['url'] is! String) return null;
+    return Map<String, dynamic>.from(decoded);
+  } catch (_) {
+    return null;
+  }
+}
 
 /// A reusable video playback page for video-capable comic sources.
 ///
