@@ -35,6 +35,8 @@ Venera-styled custom control layer. The reusable page is
 playable URL and can pass request headers when a site requires them:
 
 ```dart
+import 'package:venera/pages/video_player_page.dart';
+
 context.to(() => VideoPlayerPage(
   url: videoUrl,
   title: episodeTitle,
